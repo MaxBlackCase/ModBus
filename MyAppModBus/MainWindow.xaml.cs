@@ -16,7 +16,7 @@ namespace MyAppModBus {
   /// <summary>
   /// Логика взаимодействия для MainWindow.xaml
   /// </summary>
-  public partial class MainWindow : MetroWindow {
+  public partial class MainWindow {
 
     const byte slaveID = 1;
 
@@ -48,7 +48,6 @@ namespace MyAppModBus {
     public MainWindow() {
       InitializeComponent();
       AddItemToComboBox();
-      ThemeManager.Current.ChangeTheme( this, "Dark.Steel" );
       GraphLines();
     }
 
