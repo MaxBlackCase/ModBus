@@ -127,8 +127,8 @@
     <PackageReference Include="MahApps.Metro">
       <Version>2.1.1</Version>
     </PackageReference>
-    <PackageReference Include="MahApps.Metro.Resources">
-      <Version>0.6.1</Version>
+    <PackageReference Include="Microsoft.Maps.MapControl.WPF">
+      <Version>1.0.0.3</Version>
     </PackageReference>
     <PackageReference Include="NModbus4">
       <Version>2.1.0</Version>
@@ -141,6 +141,15 @@
     </PackageReference>
     <PackageReference Include="System.IO.Ports">
       <Version>5.0.0-preview.6.20305.6</Version>
+    </PackageReference>
+    <PackageReference Include="System.Reactive">
+      <Version>4.4.1</Version>
+    </PackageReference>
+    <PackageReference Include="System.Reactive.Interfaces">
+      <Version>4.4.1</Version>
+    </PackageReference>
+    <PackageReference Include="System.Reactive.Linq">
+      <Version>4.4.1</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
