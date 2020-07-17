@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MyAppModBus.ViewModel
 {
-  internal class OxyPlotViewModel : BaseViewModel
+  internal class OxyPlotViewModel 
   {
 
   }
