@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using InteractiveDataDisplay.WPF;
 using MahApps.Metro.Controls;
 using ControlzEx.Theming;
+using MyAppModBus.ViewModel;
 
 namespace MyAppModBus {
   /// <summary>
@@ -423,7 +424,11 @@ namespace MyAppModBus {
       }
     }
 
+  }
 
+
+  internal class OxyPlot : OxyPlotViewModel
+  {
 
   }
 }
