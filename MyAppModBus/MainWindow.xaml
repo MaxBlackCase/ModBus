@@ -5,6 +5,7 @@
                       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                       xmlns:d3="clr-namespace:InteractiveDataDisplay.WPF;assembly=InteractiveDataDisplay.WPF"
                       xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
+                      xmlns:vm="clr-namespace:MyAppModBus.ViewModel"
                       mc:Ignorable="d"
                       Title="ModBus(RTU)"
                       Height="650"
@@ -23,9 +24,9 @@
 
     </Controls:WindowCommands>
   </Controls:MetroWindow.LeftWindowCommands>
-  <Window.Resources>
-
-  </Window.Resources>
+  <Window.DataContext>
+    <vm:OxyPlotViewModel/>
+  </Window.DataContext>
   <Grid>
     <Grid.RowDefinitions>
       <RowDefinition Height="auto" />

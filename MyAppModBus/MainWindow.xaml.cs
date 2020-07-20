@@ -7,19 +7,15 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Windows.Threading;
-using System.Collections.Generic;
-using InteractiveDataDisplay.WPF;
 using MahApps.Metro.Controls;
-using ControlzEx.Theming;
-using MyAppModBus.ViewModel;
-using OxyPlot;
-using OxyPlot.Axes;
+using MyAppModBus.Models;
 
-namespace MyAppModBus {
+namespace MyAppModBus
+{
   /// <summary>
   /// Логика взаимодействия для MainWindow.xaml
   /// </summary>
-  public partial class MainWindow {
+  public partial class MainWindow : OxyPlotModel {
 
     const byte slaveID = 1;
 
@@ -32,17 +28,6 @@ namespace MyAppModBus {
     public static SerialPort _serialPort = null;
     public static ModbusSerialMaster master = null;
 
-    private Dictionary<int, double> volltage = new Dictionary<int, double>();
-    private Dictionary<int, double> current = new Dictionary<int, double>();
-    private Dictionary<int, double> torque = new Dictionary<int, double>();
-    private Dictionary<int, double> tempExternal = new Dictionary<int, double>();
-    private Dictionary<int, double> tempMotor = new Dictionary<int, double>();
-
-    private LineGraph volltageLine = new LineGraph();
-    private LineGraph currentLine = new LineGraph();
-    private LineGraph torqueLine = new LineGraph();
-    private LineGraph externalLine = new LineGraph();
-    private LineGraph motorLine = new LineGraph();
 
 
     /// <summary>
@@ -51,7 +36,6 @@ namespace MyAppModBus {
     public MainWindow() {
       InitializeComponent();
       AddItemToComboBox();
-      GraphLines();
     }
 
     //Инициализация портов
@@ -175,17 +159,6 @@ namespace MyAppModBus {
         SetValSingleRegister( result[ 9 ], result[ 10 ] );
 
         if ( countTime % readWriteTimeOut == 0 ) {
-          volltage.Add( countIndex, Convert.ToDouble( result[ 0 ] ) );
-          current.Add( countIndex, Convert.ToDouble( result[ 1 ] ) );
-          torque.Add( countIndex, Convert.ToDouble( result[ 4 ] ) );
-          tempExternal.Add( countIndex, Convert.ToDouble( result[ 2 ] ) );
-          tempMotor.Add( countIndex, Convert.ToDouble( result[ 3 ] ) );
-
-          volltageLine.Plot( volltage.Keys, volltage.Values );
-          currentLine.Plot( current.Keys, current.Values );
-          torqueLine.Plot( torque.Keys, torque.Values );
-          externalLine.Plot( tempExternal.Keys, tempExternal.Values );
-          motorLine.Plot( tempMotor.Keys, tempMotor.Values );
 
         }
 
@@ -338,40 +311,6 @@ namespace MyAppModBus {
       }
     }
 
-
-    /// <summary>
-    /// Отрисовка графиков и их линий
-    /// </summary>
-    private void GraphLines() {
-
-      lines.Children.Add( volltageLine );
-      lines.Children.Add( currentLine );
-      lines.Children.Add( torqueLine );
-      lines_two.Children.Add( externalLine );
-      lines_two.Children.Add( motorLine );
-
-      //Линии первого графика
-      volltageLine.Stroke = new SolidColorBrush( Color.FromRgb( 33, 150, 243 ) );
-      volltageLine.Description = String.Format( $"Voltage" );
-      volltageLine.StrokeThickness = 2;
-      currentLine.Stroke = new SolidColorBrush( Color.FromRgb( 76, 175, 80 ) );
-      currentLine.Description = String.Format( $"Current" );
-      currentLine.StrokeThickness = 2;
-      torqueLine.Stroke = new SolidColorBrush( Color.FromRgb( 251, 140, 0 ) );
-      torqueLine.Description = String.Format( $"Torque" );
-      torqueLine.StrokeThickness = 2;
-
-      //Линии второго графика
-      externalLine.Stroke = new SolidColorBrush( Color.FromRgb( 244, 67, 54 ) );
-      externalLine.Description = String.Format( $"Temp Extermal" );
-      externalLine.StrokeThickness = 2;
-
-      motorLine.Stroke = new SolidColorBrush( Color.FromRgb( 103, 58, 183 ) );
-      motorLine.Description = String.Format( $"Temp Motor" );
-      motorLine.StrokeThickness = 2;
-
-    }
-
     /// <summary>
     /// Запрос из регистров Master(a) и запусе/остановка таймера
     /// </summary>
@@ -426,12 +365,5 @@ namespace MyAppModBus {
     }
 
   }
-
-
-  internal class OxyPlot : OxyPlotViewModel
-  {
-
-    
-
-  }
+  
 }
