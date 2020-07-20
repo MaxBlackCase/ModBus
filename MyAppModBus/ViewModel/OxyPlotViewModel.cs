@@ -9,59 +9,48 @@ using System.Threading;
 
 namespace MyAppModBus.ViewModel
 {
-  public class OxyPlotViewModel : BaseViewModel
-  {
+  public class OxyPlotViewModel : BaseViewModel{
+
 
     public OxyPlotViewModel()
     {
-      TempDataPoints = new ObservableCollection<DataPoint>();
-      HumiDataPoints = new ObservableCollection<DataPoint>();
-
-      var rd = new Random();
-
-      Task.Run(() =>
-      {
-        while (true)
-        {
-          var date = DateTime.Now;
-          App.Current.Dispatcher.BeginInvoke(new Action(() => {
-
-            TempDataPoints.Add(DateTimeAxis.CreateDataPoint(date, (double)(rd.Next(100, 500) / 10.0)));
-            HumiDataPoints.Add(DateTimeAxis.CreateDataPoint(date, (double)(rd.Next(500, 800) / 10.0)));
-            if (TempDataPoints.Count > 300)
-            {
-              TempDataPoints.RemoveAt(0);
-              HumiDataPoints.RemoveAt(0);
-            }
-          }));
-
-          Thread.Sleep(100);
-        }
-      });
-
 
     }
 
 
     private PlotModel _model;
-    private ObservableCollection<DataPoint> _tempDatapPoints;
-    private ObservableCollection<DataPoint> _humiDataPoint;
+    private ObservableCollection<DataPoint> _volltagePoints;
+    private ObservableCollection<DataPoint> _currentPoints;
+    private ObservableCollection<DataPoint> _torquePoints;
+    private double _countTime;
 
     public PlotModel Model {
       get => _model;
       set => Set(ref _model, value);
     }
 
-    public ObservableCollection<DataPoint> TempDataPoints {
-      get => _tempDatapPoints;
-      set => Set(ref _tempDatapPoints, value);
+    public ObservableCollection<DataPoint> VolltagePoints
+    {
+      get => _volltagePoints;
+      set => Set(ref _volltagePoints, value);
+    }
+    public ObservableCollection<DataPoint> CurrentPoints
+    {
+      get => _currentPoints;
+      set => Set(ref _currentPoints, value);
+    }
+    public ObservableCollection<DataPoint> TorquePoints
+    {
+      get => _torquePoints;
+      set => Set(ref _torquePoints, value);
     }
 
-
-    public ObservableCollection<DataPoint> HumiDataPoints {
-      get => _humiDataPoint;
-      set => Set(ref _humiDataPoint, value);
+    public double CountTime
+    {
+      get => _countTime;
+      set => Set(ref _countTime, value);
     }
+
 
   }
 }

@@ -8,14 +8,21 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 using MahApps.Metro.Controls;
-using MyAppModBus.Models;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using OxyPlot.Axes;
+using MyAppModBus.ViewModel;
+using System.Threading.Tasks;
+using System.Collections.ObjectModel;
+using OxyPlot;
 
 namespace MyAppModBus
 {
   /// <summary>
   /// Логика взаимодействия для MainWindow.xaml
   /// </summary>
-  public partial class MainWindow : OxyPlotModel {
+  public partial class MainWindow : INotifyPropertyChanged
+  {
 
     const byte slaveID = 1;
 
@@ -30,29 +37,78 @@ namespace MyAppModBus
 
 
 
+    #region Props OxyPlot
+
+    //private PlotModel Model;
+    //private ObservableCollection<DataPoint> _volltagePoints;
+    //private ObservableCollection<DataPoint> _currentPoints;
+    //private ObservableCollection<DataPoint> _torquePoints;
+
+    //public ObservableCollection<DataPoint> VolltagePoints {
+    //  get => _volltagePoints;
+    //  set => Set(ref _volltagePoints, value);
+    //}
+    //public ObservableCollection<DataPoint> CurrentPoints {
+    //  get => _currentPoints;
+    //  set => Set(ref _currentPoints, value);
+    //}
+    //public ObservableCollection<DataPoint> torquePoints {
+    //  get => _torquePoints;
+    //  set => Set(ref _torquePoints, value);
+    //}
+
+    #endregion
+
+
     /// <summary>
     /// Главнео окно
     /// </summary>
-    public MainWindow() {
+    public MainWindow()
+    {
       InitializeComponent();
       AddItemToComboBox();
+
+      
+
     }
 
+    #region ProPertyChanged
+    public event PropertyChangedEventHandler PropertyChanged;
+
+    protected virtual void OnPropertyChanged([CallerMemberName] string PropertyName = null)
+    {
+      PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(PropertyName));
+    }
+
+    protected virtual bool Set<T>(ref T field, T value, [CallerMemberName] string PropertyName = null)
+    {
+      if (Equals(field, value)) return false;
+      field = value;
+      OnPropertyChanged(PropertyName);
+      return true;
+    }
+    #endregion
+
     //Инициализация портов
-    private void AddItemToComboBox() {
+    private void AddItemToComboBox()
+    {
       //Получение портов
       string[] ports = SerialPort.GetPortNames();
-      foreach ( string port in ports ) {
-        if ( port == "" ) {
-          comboBoxMainPorts.Items.Add( "Отсутствует порт" );
+      foreach (string port in ports)
+      {
+        if (port == "")
+        {
+          comboBoxMainPorts.Items.Add("Отсутствует порт");
         }
-        else {
+        else
+        {
           string str = port.ToString();
           int maxLength = 3;
-          string result = str.Substring( 0, Math.Min( str.Length, maxLength ) );
+          string result = str.Substring(0, Math.Min(str.Length, maxLength));
 
-          if ( result == "COM" ) {
-            comboBoxMainPorts.Items.Add( port );
+          if (result == "COM")
+          {
+            comboBoxMainPorts.Items.Add(port);
           }
         }
       }
@@ -64,12 +120,15 @@ namespace MyAppModBus
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
-    private void ConnectToDevice( object sender, RoutedEventArgs e ) {
+    private void ConnectToDevice(object sender, RoutedEventArgs e)
+    {
       _serialPort = new SerialPort();
       timer = new DispatcherTimer();
 
-      try {
-        if ( _serialPort.IsOpen ) {
+      try
+      {
+        if (_serialPort.IsOpen)
+        {
           _serialPort.Close();
           disconnectComPort.Visibility = Visibility.Hidden;
 
@@ -86,7 +145,7 @@ namespace MyAppModBus
         _serialPort.Open();
         #endregion
 
-        master = ModbusSerialMaster.CreateRtu( _serialPort );
+        master = ModbusSerialMaster.CreateRtu(_serialPort);
 
         //Сброс регистров
         ResetRegisters();
@@ -103,7 +162,8 @@ namespace MyAppModBus
         textViewer.Text = $"Порт {_serialPort.PortName} Подключен";
 
       }
-      catch ( Exception err ) {
+      catch (Exception err)
+      {
         _serialPort.Close();
         connectComPort.Content = "Подключить";
         comboBoxMainPorts.IsEnabled = true;
@@ -120,7 +180,8 @@ namespace MyAppModBus
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
-    private void DisconnectToDevice( object sender, RoutedEventArgs e ) {
+    private void DisconnectToDevice(object sender, RoutedEventArgs e)
+    {
       timer.Stop();
       _serialPort.Close();
       _serialPort.Dispose();
@@ -144,27 +205,31 @@ namespace MyAppModBus
     private double countTime = 0;
     private int countIndex = 0;
 
-    private void GetHoldReg( object sender, EventArgs e ) {
-      ushort[] result = master.ReadHoldingRegisters( slaveID, startAddress, numburOfPoints );
-      try {
+    private void GetHoldReg(object sender, EventArgs e)
+    {
+      ushort[] result = master.ReadHoldingRegisters(slaveID, startAddress, numburOfPoints);
+      try
+      {
 
         textViewer.Text = "";
         countTime += readWriteTimeOut;
 
-        for ( int i = 0; i < result.Length; i++ ) {
-          textViewer.Text += $"Регистр: {i} \t{result[ i ]}\n";
-
+        for (int i = 0; i < result.Length; i++)
+        {
+          textViewer.Text += $"Регистр: {i} \t{result[i]}\n";
         }
 
-        SetValSingleRegister( result[ 9 ], result[ 10 ] );
+        SetValSingleRegister(result[9], result[10]);
 
-        if ( countTime % readWriteTimeOut == 0 ) {
-
+        if (countTime % readWriteTimeOut == 0)
+        {
+          var date = DateTime.Now;
         }
 
         countIndex++;
       }
-      catch ( Exception err ) {
+      catch (Exception err)
+      {
         textViewer.Text = $"Ошибка: {err.Message}";
       }
 
@@ -220,47 +285,55 @@ namespace MyAppModBus
     /// <summary>
     /// Получение данных концевиков
     /// </summary>
-    private void SetValSingleRegister( ushort registrNine, ushort registrTen ) {
+    private void SetValSingleRegister(ushort registrNine, ushort registrTen)
+    {
 
-      try {
-        if ( _serialPort.IsOpen ) {
+      try
+      {
+        if (_serialPort.IsOpen)
+        {
 
-          int[] arrLimitSwitch = new int[ 2 ];
-          arrLimitSwitch[ 0 ] = Convert.ToInt32( registrNine );
-          arrLimitSwitch[ 1 ] = Convert.ToInt32( registrTen );
+          int[] arrLimitSwitch = new int[2];
+          arrLimitSwitch[0] = Convert.ToInt32(registrNine);
+          arrLimitSwitch[1] = Convert.ToInt32(registrTen);
 
 
-          for ( int i = 0; i < LimSwPanel.Children.Count; i++ ) {
+          for (int i = 0; i < LimSwPanel.Children.Count; i++)
+          {
             LimSwPanel.Children.Clear();
           }
 
-          foreach ( var item in arrLimitSwitch ) {
-            if ( item == 1 ) {
+          foreach (var item in arrLimitSwitch)
+          {
+            if (item == 1)
+            {
               Ellipse LimSwEllipse = new Ellipse
               {
                 Width = 20,
                 Height = 20,
                 Fill = Brushes.Green,
-                Margin = new Thickness( 0, 0, 10, 15 )
+                Margin = new Thickness(0, 0, 10, 15)
               };
-              LimSwPanel.Children.Add( LimSwEllipse );
+              LimSwPanel.Children.Add(LimSwEllipse);
             }
-            else {
+            else
+            {
               Ellipse LimSwEllipse = new Ellipse
               {
                 Width = 20,
                 Height = 20,
                 Fill = Brushes.Red,
-                Margin = new Thickness( 0, 0, 10, 15 )
+                Margin = new Thickness(0, 0, 10, 15)
               };
-              LimSwPanel.Children.Add( LimSwEllipse );
+              LimSwPanel.Children.Add(LimSwEllipse);
             }
           }
 
         }
 
       }
-      catch ( Exception err ) {
+      catch (Exception err)
+      {
 
         textViewer.Text = $"Ошибка: {err.Message}";
       }
@@ -272,27 +345,33 @@ namespace MyAppModBus
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
-    private void TextBoxDecimalPreviewTextInput( object sender, TextCompositionEventArgs e ) {
-      e.Handled = new Regex( "[^0-9]+" ).IsMatch( e.Text );
+    private void TextBoxDecimalPreviewTextInput(object sender, TextCompositionEventArgs e)
+    {
+      e.Handled = new Regex("[^0-9]+").IsMatch(e.Text);
     }
     /// <summary>
     /// Задает время опроса устройства в ms
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
-    private void DecimalButtonTimeoutClic( object sender, RoutedEventArgs e ) {
-      if ( decTextBox.Text != "" ) {
-        double valTextBox = Convert.ToDouble( decTextBox.Text );
+    private void DecimalButtonTimeoutClic(object sender, RoutedEventArgs e)
+    {
+      if (decTextBox.Text != "")
+      {
+        double valTextBox = Convert.ToDouble(decTextBox.Text);
 
-        if ( valTextBox < 20 ) {
+        if (valTextBox < 20)
+        {
           readWriteTimeOut = 20;
           textViewer.Text = $"Интервал не может быть меньше {readWriteTimeOut} ms, поэтому задан интервал по умолчанию {readWriteTimeOut} ms.";
         }
-        else if ( valTextBox > 1000 ) {
+        else if (valTextBox > 1000)
+        {
           readWriteTimeOut = 1000;
           textViewer.Text = $"Значение не может превышать значение в {readWriteTimeOut} ms, поэтому задано значение по умолчанию {readWriteTimeOut} ms.";
         }
-        else {
+        else
+        {
           readWriteTimeOut = (int)valTextBox;
           textViewer.Text = $"Значение интервала опроса устроства: {readWriteTimeOut} ms";
         }
@@ -303,11 +382,13 @@ namespace MyAppModBus
     /// <summary>
     /// Сброс регистров 
     /// </summary>
-    private void ResetRegisters() {
+    private void ResetRegisters()
+    {
       ushort[] arrRegisters = new ushort[] { 6, 7, 8 };
 
-      for ( int i = 0; i < arrRegisters.Length; i++ ) {
-        master.WriteSingleRegister( slaveID, arrRegisters[ i ], 0 );
+      for (int i = 0; i < arrRegisters.Length; i++)
+      {
+        master.WriteSingleRegister(slaveID, arrRegisters[i], 0);
       }
     }
 
@@ -316,23 +397,28 @@ namespace MyAppModBus
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
-    private void RegistersRequest( object sender, RoutedEventArgs e ) {
+    private void RegistersRequest(object sender, RoutedEventArgs e)
+    {
       var BtnStartTimerAndRegistersRequest = StartRegsRequest;
-      try {
-        if ( _serialPort.IsOpen && timer.IsEnabled == false ) {
+      try
+      {
+        if (_serialPort.IsOpen && timer.IsEnabled == false)
+        {
           #region <Timer>
-          timer.Tick += new EventHandler( GetHoldReg );
-          timer.Interval = new TimeSpan( 0, 0, 0, 0, readWriteTimeOut );
+          timer.Tick += new EventHandler(GetHoldReg);
+          timer.Interval = new TimeSpan(0, 0, 0, 0, readWriteTimeOut);
           timer.Start();
           #endregion
           BtnStartTimerAndRegistersRequest.Content = "Остановить";
         }
-        else {
+        else
+        {
           timer.Stop();
           BtnStartTimerAndRegistersRequest.Content = "Запустить";
         }
       }
-      catch ( Exception err ) {
+      catch (Exception err)
+      {
         textViewer.Text = $"Ошибка: {err.Message}";
       }
     }
@@ -342,28 +428,34 @@ namespace MyAppModBus
     /// </summary>
     /// <param name="sender">Объект</param>
     /// <param name="e">Событие</param>
-    private void CheсkValToRegisters( object sender, RoutedEventArgs e ) {
+    private void CheсkValToRegisters(object sender, RoutedEventArgs e)
+    {
       ToggleSwitch toggleSwitch = sender as ToggleSwitch;
-      var indElem = CheckBoxWriteRegisters.Children.IndexOf( toggleSwitch );
+      var indElem = CheckBoxWriteRegisters.Children.IndexOf(toggleSwitch);
       ushort[] arrRegisters = new ushort[] { 6, 7, 8 };
-      if ( toggleSwitch != null && _serialPort.IsOpen ) {
-        if ( toggleSwitch.IsOn == true ) {
-          for ( var i = 0; i < arrRegisters.Length; i++ ) {
-            if ( i == indElem ) {
-              master.WriteSingleRegister( slaveID, arrRegisters[ i ], 1 );
+      if (toggleSwitch != null && _serialPort.IsOpen)
+      {
+        if (toggleSwitch.IsOn == true)
+        {
+          for (var i = 0; i < arrRegisters.Length; i++)
+          {
+            if (i == indElem)
+            {
+              master.WriteSingleRegister(slaveID, arrRegisters[i], 1);
             }
           }
         }
-        else {
-          for ( var i = 0; i < arrRegisters.Length; i++ ) {
-            if ( i == indElem ) {
-              master.WriteSingleRegister( slaveID, arrRegisters[ i ], 0 );
+        else
+        {
+          for (var i = 0; i < arrRegisters.Length; i++)
+          {
+            if (i == indElem)
+            {
+              master.WriteSingleRegister(slaveID, arrRegisters[i], 0);
             }
           }
         }
       }
     }
-
   }
-  
 }
