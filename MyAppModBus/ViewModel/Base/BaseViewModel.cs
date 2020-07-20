@@ -4,7 +4,7 @@ using System.Runtime.CompilerServices;
 
 namespace MyAppModBus.Base.BaseViewModel
 {
-  internal abstract class BaseViewModel : INotifyPropertyChanged, IDisposable
+  public abstract class BaseViewModel : INotifyPropertyChanged, IDisposable
   {
     public event PropertyChangedEventHandler PropertyChanged;
 
@@ -27,6 +27,8 @@ namespace MyAppModBus.Base.BaseViewModel
     }
 
     private bool _Disposed;
+
+
     protected virtual void Dispose(bool Disposing)
     {
       if (!Disposing || _Disposed) return;
