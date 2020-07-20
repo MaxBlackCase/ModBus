@@ -12,12 +12,14 @@ using InteractiveDataDisplay.WPF;
 using MahApps.Metro.Controls;
 using ControlzEx.Theming;
 using MyAppModBus.ViewModel;
+using OxyPlot;
+using OxyPlot.Axes;
 
 namespace MyAppModBus {
   /// <summary>
   /// Логика взаимодействия для MainWindow.xaml
   /// </summary>
-  public partial class MainWindow : MetroWindow {
+  public partial class MainWindow {
 
     const byte slaveID = 1;
 
@@ -49,7 +51,6 @@ namespace MyAppModBus {
     public MainWindow() {
       InitializeComponent();
       AddItemToComboBox();
-      ThemeManager.Current.ChangeTheme( this, "Dark.Steel" );
       GraphLines();
     }
 
@@ -310,8 +311,8 @@ namespace MyAppModBus {
       if ( decTextBox.Text != "" ) {
         double valTextBox = Convert.ToDouble( decTextBox.Text );
 
-        if ( valTextBox < 50 ) {
-          readWriteTimeOut = 50;
+        if ( valTextBox < 20 ) {
+          readWriteTimeOut = 20;
           textViewer.Text = $"Интервал не может быть меньше {readWriteTimeOut} ms, поэтому задан интервал по умолчанию {readWriteTimeOut} ms.";
         }
         else if ( valTextBox > 1000 ) {
@@ -429,6 +430,8 @@ namespace MyAppModBus {
 
   internal class OxyPlot : OxyPlotViewModel
   {
+
+    
 
   }
 }

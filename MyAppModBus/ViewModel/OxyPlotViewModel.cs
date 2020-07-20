@@ -9,13 +9,12 @@ namespace MyAppModBus.ViewModel
 
 
     private PlotModel _model;
+    private ObservableCollection<DataPoint> _tempDatapPoints;
 
     public PlotModel Model {
       get => _model;
       set => Set(ref _model, value);
     }
-
-    private ObservableCollection<DataPoint> _tempDatapPoints;
 
     public ObservableCollection<DataPoint> TempDataPoints {
       get => _tempDatapPoints;
