@@ -1,29 +1,20 @@
-﻿using System.Collections.ObjectModel;
-using MyAppModBus.Models;
+﻿using MyAppModBus.ViewModel.BaseViewModel;
 using OxyPlot;
+using System.Collections.ObjectModel;
 
 namespace MyAppModBus.ViewModel
 {
-  internal class OxyPlotViewModel : OxyPlotModel
+  internal class OxyPlotViewModel : ViewModelBase
   {
-
-
     public OxyPlotViewModel()
     {
-       
+      
     }
 
 
-    private PlotModel _model;
     private ObservableCollection<DataPoint> _volltagePoints;
     private ObservableCollection<DataPoint> _currentPoints;
     private ObservableCollection<DataPoint> _torquePoints;
-    private double _countTime;
-
-    public PlotModel Model {
-      get => _model;
-      set => Set(ref _model, value);
-    }
 
     public ObservableCollection<DataPoint> VolltagePoints
     {
@@ -39,12 +30,6 @@ namespace MyAppModBus.ViewModel
     {
       get => _torquePoints;
       set => Set(ref _torquePoints, value);
-    }
-
-    public double CountTime
-    {
-      get => _countTime;
-      set => Set(ref _countTime, value);
     }
 
   }

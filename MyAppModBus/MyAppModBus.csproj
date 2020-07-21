@@ -82,7 +82,7 @@
     </ApplicationDefinition>
     <Compile Include="Infrastructure\Commands\Base\Command.cs" />
     <Compile Include="Models\OxyPlotModel.cs" />
-    <Compile Include="ViewModel\Base\BaseViewModel.cs" />
+    <Compile Include="ViewModel\Base\ViewModelBase.cs" />
     <Compile Include="ViewModel\OxyPlotViewModel.cs" />
     <Page Include="Views\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

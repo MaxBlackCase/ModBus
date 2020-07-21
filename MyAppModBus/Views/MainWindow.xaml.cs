@@ -8,52 +8,25 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 using MahApps.Metro.Controls;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
 
 namespace MyAppModBus
 {
   /// <summary>
   /// Логика взаимодействия для MainWindow.xaml
   /// </summary>
-  public partial class MainWindow : INotifyPropertyChanged
+  public partial class MainWindow
   {
 
     const byte slaveID = 1;
 
     private readonly ushort startAddress = 0;
     private readonly ushort numburOfPoints = 18;
-    private int readWriteTimeOut = 50;
+    private int readWriteTimeOut = 20;
 
     public static string result;
     private DispatcherTimer timer;
     private static SerialPort _serialPort = null;
     private static ModbusSerialMaster master = null;
-
-
-
-    #region Props OxyPlot
-
-    //private PlotModel Model;
-    //private ObservableCollection<DataPoint> _volltagePoints;
-    //private ObservableCollection<DataPoint> _currentPoints;
-    //private ObservableCollection<DataPoint> _torquePoints;
-
-    //public ObservableCollection<DataPoint> VolltagePoints {
-    //  get => _volltagePoints;
-    //  set => Set(ref _volltagePoints, value);
-    //}
-    //public ObservableCollection<DataPoint> CurrentPoints {
-    //  get => _currentPoints;
-    //  set => Set(ref _currentPoints, value);
-    //}
-    //public ObservableCollection<DataPoint> torquePoints {
-    //  get => _torquePoints;
-    //  set => Set(ref _torquePoints, value);
-    //}
-
-    #endregion
-
 
     /// <summary>
     /// Главнео окно
@@ -62,27 +35,7 @@ namespace MyAppModBus
     {
       InitializeComponent();
       AddItemToComboBox();
-
-      
-
     }
-
-    #region ProPertyChanged
-    public event PropertyChangedEventHandler PropertyChanged;
-
-    protected virtual void OnPropertyChanged([CallerMemberName] string PropertyName = null)
-    {
-      PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(PropertyName));
-    }
-
-    protected virtual bool Set<T>(ref T field, T value, [CallerMemberName] string PropertyName = null)
-    {
-      if (Equals(field, value)) return false;
-      field = value;
-      OnPropertyChanged(PropertyName);
-      return true;
-    }
-    #endregion
 
     //Инициализация портов
     private void AddItemToComboBox()
@@ -119,7 +72,6 @@ namespace MyAppModBus
     {
       _serialPort = new SerialPort();
       timer = new DispatcherTimer();
-
       try
       {
         if (_serialPort.IsOpen)
@@ -166,8 +118,6 @@ namespace MyAppModBus
         disconnectComPort.Visibility = Visibility.Hidden;
         textViewer.Text = $"Ошибка: {err.Message}";
       }
-
-
     }
 
     /// <summary>
@@ -199,7 +149,6 @@ namespace MyAppModBus
 
     private double countTime = 0;
     private int countIndex = 0;
-
     private void GetHoldReg(object sender, EventArgs e)
     {
       ushort[] result = master.ReadHoldingRegisters(slaveID, startAddress, numburOfPoints);

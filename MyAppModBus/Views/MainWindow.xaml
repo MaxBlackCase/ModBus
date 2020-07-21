@@ -6,7 +6,8 @@
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
   xmlns:oxy="http://oxyplot.org/wpf"
   xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
-  xmlns:oxvm="clr-namespace:MyAppModBus.ViewModel"
+  xmlns:vm="clr-namespace:MyAppModBus.ViewModel"
+  xmlns:lc="clr-namespace:MyAppModBus"
   mc:Ignorable="d"
   Title="ModBus(RTU)"
   Height="650"
@@ -21,7 +22,7 @@
   FontFamily="Arial Rounded MT Bold"
   Foreground="#fff">
   <Controls:MetroWindow.DataContext>
-    <oxvm:OxyPlotViewModel />
+    <vm:OxyPlotViewModel />
   </Controls:MetroWindow.DataContext>
   <Grid>
     <Grid.RowDefinitions>
@@ -278,6 +279,7 @@
           </oxy:Plot.Axes>
           <oxy:Plot.Series >
             <oxy:LineSeries
+              x:Name="linesVoltage"
               Title="Voltage"
               MarkerType="None"
               ItemsSource="{Binding VolltagePoints}" />
@@ -293,7 +295,7 @@
         </oxy:Plot>
         <TextBlock
           Grid.Row="1"
-          Grid.Column="0" Text="{Binding CountTime}" FontSize="32" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="#fff"/>
+          Grid.Column="0" Text="" FontSize="32" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="#fff"/>
       </Grid>
     </Grid>
   </Grid>

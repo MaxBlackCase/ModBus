@@ -4,7 +4,7 @@ using System.Runtime.CompilerServices;
 
 namespace MyAppModBus.ViewModel.BaseViewModel
 {
-  internal abstract class BaseViewModel : INotifyPropertyChanged, IDisposable
+  internal abstract class ViewModelBase : INotifyPropertyChanged, IDisposable
   {
     public event PropertyChangedEventHandler PropertyChanged;
 

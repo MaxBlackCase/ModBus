@@ -3,28 +3,11 @@ using System.Threading.Tasks;
 
 namespace MyAppModBus.Models
 {
-  internal class OxyPlotModel : BaseViewModel
+  internal class OxyPlotModel
   {
 
     public OxyPlotModel()
     {
-      SetCountTime(1000);
-    }
-
-    public void SetCountTime(int seconds)
-    {
-
-      Task.Factory.StartNew(() => {
-
-        while (true)
-        {
-          Task.Delay(seconds).Wait();
-
-          CountTime++;
-        }
-      
-      });
-      
     }
 
   }
