@@ -10,11 +10,6 @@ using System.Windows.Threading;
 using MahApps.Metro.Controls;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using OxyPlot.Axes;
-using MyAppModBus.ViewModel;
-using System.Threading.Tasks;
-using System.Collections.ObjectModel;
-using OxyPlot;
 
 namespace MyAppModBus
 {
