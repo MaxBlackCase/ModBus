@@ -291,6 +291,9 @@
               ItemsSource="{Binding TorquePoints}" />
           </oxy:Plot.Series>
         </oxy:Plot>
+        <TextBlock
+          Grid.Row="1"
+          Grid.Column="0" Text="{Binding CountTime}" FontSize="32" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="#fff"/>
       </Grid>
     </Grid>
   </Grid>

@@ -27,8 +27,8 @@ namespace MyAppModBus
 
     public static string result;
     private DispatcherTimer timer;
-    public static SerialPort _serialPort = null;
-    public static ModbusSerialMaster master = null;
+    private static SerialPort _serialPort = null;
+    private static ModbusSerialMaster master = null;
 
 
 

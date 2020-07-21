@@ -1,20 +1,16 @@
-﻿using MyAppModBus.Base.BaseViewModel;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
+using MyAppModBus.Models;
 using OxyPlot;
-using OxyPlot.Series;
-using System.Threading.Tasks;
-using System;
-using OxyPlot.Axes;
-using System.Threading;
 
 namespace MyAppModBus.ViewModel
 {
-  public class OxyPlotViewModel : BaseViewModel{
+  internal class OxyPlotViewModel : OxyPlotModel
+  {
 
 
     public OxyPlotViewModel()
     {
-
+       
     }
 
 
@@ -50,7 +46,6 @@ namespace MyAppModBus.ViewModel
       get => _countTime;
       set => Set(ref _countTime, value);
     }
-
 
   }
 }
