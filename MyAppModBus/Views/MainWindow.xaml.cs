@@ -8,6 +8,9 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 using MahApps.Metro.Controls;
+using System.Collections.ObjectModel;
+using OxyPlot;
+using OxyPlot.Axes;
 
 namespace MyAppModBus
 {
@@ -27,6 +30,8 @@ namespace MyAppModBus
     private DispatcherTimer timer;
     private static SerialPort _serialPort = null;
     private static ModbusSerialMaster master = null;
+    private ObservableCollection<DataPoint> _volltagePoints = new ObservableCollection<DataPoint>;
+
 
     /// <summary>
     /// Главнео окно
@@ -148,7 +153,7 @@ namespace MyAppModBus
     /// <param name="e"></param>
 
     private double countTime = 0;
-    private int countIndex = 0;
+    private double countIndex = 0;
     private void GetHoldReg(object sender, EventArgs e)
     {
       ushort[] result = master.ReadHoldingRegisters(slaveID, startAddress, numburOfPoints);
@@ -167,7 +172,6 @@ namespace MyAppModBus
 
         if (countTime % readWriteTimeOut == 0)
         {
-          var date = DateTime.Now;
         }
 
         countIndex++;

@@ -11,11 +11,17 @@ namespace MyAppModBus.ViewModel
       
     }
 
+    private string _titleMainWindow = "ModBus(RTU)";
 
     private ObservableCollection<DataPoint> _volltagePoints;
     private ObservableCollection<DataPoint> _currentPoints;
     private ObservableCollection<DataPoint> _torquePoints;
 
+
+    public string TitleMainWindow {
+      get => _titleMainWindow;
+      set => Set(ref _titleMainWindow, value);
+    }
     public ObservableCollection<DataPoint> VolltagePoints
     {
       get => _volltagePoints;

@@ -9,7 +9,7 @@
   xmlns:vm="clr-namespace:MyAppModBus.ViewModel"
   xmlns:lc="clr-namespace:MyAppModBus"
   mc:Ignorable="d"
-  Title="ModBus(RTU)"
+  Title="{Binding TitleMainWindow}"
   Height="650"
   Width="1200"
   BorderThickness="0"
