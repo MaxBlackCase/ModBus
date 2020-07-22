@@ -291,7 +291,7 @@ namespace MyAppModBus
     /// <param name="e"></param>
     private void TextBoxDecimalPreviewTextInput(object sender, TextCompositionEventArgs e)
     {
-      e.Handled = new Regex("[^0-9]+").IsMatch(e.Text);
+      e.Handled = new Regex("[^0-9]+").IsMatch(e.Text );
     }
     /// <summary>
     /// Задает время опроса устройства в ms
@@ -308,16 +308,22 @@ namespace MyAppModBus
         {
           readWriteTimeOut = 20;
           textViewer.Text = $"Интервал не может быть меньше {readWriteTimeOut} ms, поэтому задан интервал по умолчанию {readWriteTimeOut} ms.";
+          decTextBox.Text = string.Format("{0} ms", readWriteTimeOut);
+
         }
         else if (valTextBox > 1000)
         {
           readWriteTimeOut = 1000;
           textViewer.Text = $"Значение не может превышать значение в {readWriteTimeOut} ms, поэтому задано значение по умолчанию {readWriteTimeOut} ms.";
+          decTextBox.Text = string.Format("{0} ms", readWriteTimeOut);
+
         }
         else
         {
           readWriteTimeOut = (int)valTextBox;
           textViewer.Text = $"Значение интервала опроса устроства: {readWriteTimeOut} ms";
+          decTextBox.Text = string.Format("{0} ms", readWriteTimeOut);
+
         }
       }
 
