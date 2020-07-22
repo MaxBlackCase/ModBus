@@ -30,7 +30,6 @@ namespace MyAppModBus
     private DispatcherTimer timer;
     private static SerialPort _serialPort = null;
     private static ModbusSerialMaster master = null;
-    private ObservableCollection<DataPoint> _volltagePoints = new ObservableCollection<DataPoint>;
 
 
     /// <summary>
